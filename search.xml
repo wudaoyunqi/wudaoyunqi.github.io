@@ -262,15 +262,19 @@
   <entry>
     <title>黑马点评项目</title>
     <url>/2023/04/21/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E9%A1%B9%E7%9B%AE/</url>
-    <content><![CDATA[<h2 id="1-优惠券秒杀"><a href="#1-优惠券秒杀" class="headerlink" title="1 优惠券秒杀"></a>1 优惠券秒杀</h2><p>秒杀基本实现一：</p>
+    <content><![CDATA[<h2 id="1-优惠券秒杀"><a href="#1-优惠券秒杀" class="headerlink" title="1 优惠券秒杀"></a>1 优惠券秒杀</h2><p>下单业务本质上就是修改优惠券表中的number字段（库存），再在order表中新增一条订单数据</p>
+<p>秒杀基本实现一：</p>
 <ol>
 <li>查询优惠卷</li>
 <li>判断秒杀是否开始</li>
 <li>判断是否结束</li>
 <li>判断库存是否充足</li>
+<li>查询订单</li>
+<li>校验一人一单</li>
 <li>扣减库存</li>
 <li>创建订单</li>
 </ol>
+<p>其中1~6是在Redis中完成，因为将优惠券信息与订单信息缓存到了Redis中，当秒杀资格判断执行结束后，直接将订单id返回。如果用户有资格下单，就可以将优惠券id，用户id和订单id等信息打包存储到消息队列中，然后另开一个线程异步读取消息队列中的信息。</p>
 <h3 id="1-1-超卖问题"><a href="#1-1-超卖问题" class="headerlink" title="1.1 超卖问题"></a>1.1 超卖问题</h3><p>超卖问题是典型的<strong>多线程不安全</strong>问题，针对这一问题的常见解决方案就是<strong>加锁</strong></p>
 ]]></content>
       <categories>
