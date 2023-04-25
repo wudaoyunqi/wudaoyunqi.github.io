@@ -19,6 +19,43 @@
 ]]></content>
   </entry>
   <entry>
+    <title>面试八股——Spring系列01</title>
+    <url>/2023/04/20/%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E2%80%94%E2%80%94Spring%E7%B3%BB%E5%88%97/</url>
+    <content><![CDATA[<h2 id="1-Spring-MVC的工作流程"><a href="#1-Spring-MVC的工作流程" class="headerlink" title="1 Spring MVC的工作流程"></a>1 Spring MVC的工作流程</h2><p><img data-src="https://pic2.zhimg.com/80/v2-16d4df4fcf529667f4cb10dbbea654dd_720w.webp" alt="https://pic3.zhimg.com/80/v2-4d4f8b01c6b9faad1af473dcdda4ff06_720w.webp"></p>
+<ul>
+<li>客户端发送请求-&gt; 前端控制器 DispatcherServlet 接受客户端请求 -&gt; 调用处理器映射器 HandlerMapping 解析请求对应的 Handler-&gt; HandlerAdapter 会根据 Handler 来调用真正的处理器处理请求，并处理相应的业务逻辑 -&gt; 处理器返回一个模型视图 ModelAndView -&gt; 视图解析器进行解析，并返回一个视图对象-&gt;前端控制器 DispatcherServlet 渲染数据（将Model传给View）-&gt;将得到视图对象返回给用户</li>
+</ul>
+<p>（1）客户端（浏览器）发送请求，直接请求到 DispatcherServlet。</p>
+<p>（2）DispatcherServlet 根据请求信息调用 HandlerMapping，解析请求对应的 Handler。</p>
+<p>（3）解析到对应的 Handler（也就是我们平常说的 Controller 控制器）后，开始由 HandlerAdapter 适配器处理。</p>
+<p>（4）HandlerAdapter 会根据 Handler 来调用真正的处理器开处理请求，并处理相应的业务逻辑。</p>
+<p>（5）处理器处理完业务后，会返回一个 ModelAndView 对象，Model 是返回的数据对象，View 是个逻辑上的 View。</p>
+<p>（6）ViewResolver 会根据逻辑 View 查找实际的 View。</p>
+<p>（7）DispaterServlet 把返回的 Model 传给 View（视图渲染）。</p>
+<p>（8）把 View 返回给请求者（浏览器）</p>
+<h2 id="2-Spring几个常用的接口"><a href="#2-Spring几个常用的接口" class="headerlink" title="2 Spring几个常用的接口"></a>2 Spring几个常用的接口</h2><h3 id="2-1-BeanFactory接口"><a href="#2-1-BeanFactory接口" class="headerlink" title="2.1 BeanFactory接口"></a>2.1 BeanFactory接口</h3><p>BeanFactory： 以Factory结尾，表示它是一个工厂类，是用于管理Bean的一个工厂</p>
+<ul>
+<li><p>BeanFactory接口是Spring容器最基本的接口，它的实现机制采用的是Java经典的工厂模式。</p>
+</li>
+<li><p>BeanFactory接口提供了创建和管理Bean的方法。</p>
+</li>
+</ul>
+<h3 id="2-2-HandlerInterceptor接口"><a href="#2-2-HandlerInterceptor接口" class="headerlink" title="2.2 HandlerInterceptor接口"></a>2.2 HandlerInterceptor接口</h3><p>在SpringMVC 中定义一个Interceptor是比较非常简单，主要有两种方式：</p>
+<p>第一种：实现HandlerInterceptor 接口，或者是继承实现了HandlerInterceptor 接口的类，例如HandlerInterceptorAdapter；<br>第二种：实现Spring的WebRequestInterceptor接口，或者是继承实现了WebRequestInterceptor的类。<br>HandlerInterceptor接口主要定义了三个方法：</p>
+<ol>
+<li><p><strong>boolean preHandle</strong> (HttpServletRequest request, HttpServletResponse response, Object handle)方法：该方法将在请求处理之前进行调用，只有该方法返回true，才会继续执行后续的Interceptor和Controller，当返回值为true 时，就会继续调用下一个Interceptor的preHandle就会继续调用下一个Interceptor的preHandle 方法，如果已经是最后一个Interceptor的时候就会是调用当前请求的Controller方法；</p>
+</li>
+<li><p><strong>void postHandle</strong> (HttpServletRequest request, HttpServletResponse response, Object handle, ModelAndView modelAndView)方法：该方法将在请求处理之后，DispatcherServlet进行视图返回渲染之前进行调用，可以在这个方法中对Controller 处理之后的ModelAndView 对象进行操作。</p>
+</li>
+<li><p><strong>void afterCompletion</strong>(HttpServletRequest request, HttpServletResponse response, Object handle, Exception ex)方法：该方法也是需要当前对应的Interceptor的preHandle方法的返回值为true时才会执行，该方法将在整个请求结束之后，也就是在DispatcherServlet 渲染了对应的视图之后执行。用于进行资源清理。</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>面试八股——Spring</category>
+      </categories>
+  </entry>
+  <entry>
     <title>女书平台项目</title>
     <url>/2023/04/12/%E5%A5%B3%E4%B9%A6%E5%B9%B3%E5%8F%B0%E9%A1%B9%E7%9B%AE/</url>
     <content><![CDATA[<h2 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h2><p>4.10在豆瓣上看到招募志愿者的帖子，本来标题写着暂停招人，后来发现又更新为招募有经验的姐妹。</p>
@@ -94,7 +131,7 @@
 <li>使用<strong>原子类</strong>（AtomicXXX）：提供了一些线程安全的基本数据类型，例如AtomicInteger、AtomicLong等，它们能够保证在并发情况下对变量的操作都是原子性的。</li>
 <li>使用<strong>线程安全的集合</strong>：例如ConcurrentHashMap、CopyOnWriteArrayList等，它们在内部实现上使用了同步机制，能够保证在多线程环境下的正确性和一致性。</li>
 </ol>
-<h2 id="2-Volatile关键字"><a href="#2-Volatile关键字" class="headerlink" title="2 Volatile关键字"></a>2 Volatile关键字</h2><h3 id="2-1-JMM模型（Java内存模型）"><a href="#2-1-JMM模型（Java内存模型）" class="headerlink" title="2.1 JMM模型（Java内存模型）"></a>2.1 JMM模型（Java内存模型）</h3><p><img src="http://mmbiz.qpic.cn/mmbiz_png/NtO5sialJZGricHmm50IzXNiaAMroheficIiaoP0yvpTjvtYXECkp5GNib77GCbu7s5ticlhJ7wP6icxHRbgVLmhKj1vAg/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1"></p>
+<h2 id="2-Volatile关键字"><a href="#2-Volatile关键字" class="headerlink" title="2 Volatile关键字"></a>2 Volatile关键字</h2><h3 id="2-1-JMM模型（Java内存模型）"><a href="#2-1-JMM模型（Java内存模型）" class="headerlink" title="2.1 JMM模型（Java内存模型）"></a>2.1 JMM模型（Java内存模型）</h3><p><img data-src="http://mmbiz.qpic.cn/mmbiz_png/NtO5sialJZGricHmm50IzXNiaAMroheficIiaoP0yvpTjvtYXECkp5GNib77GCbu7s5ticlhJ7wP6icxHRbgVLmhKj1vAg/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1"></p>
 <p><strong>1.主内存（Main Memory）</strong></p>
 <p>主内存可以简单理解为计算机当中的内存，但又不完全等同。主内存被所有的线程所共享，对于一个共享变量（比如静态变量，或是堆内存中的实例）来说，主内存当中存储了它的“本尊”。</p>
 <p><strong>2.工作内存（Working Memory）</strong></p>
@@ -149,7 +186,7 @@
 <p><strong>Synchronized的语义底层是通过一个monitor的对象来完成，其实wait&#x2F;notify等方法也依赖于monitor对象</strong>，这就是为什么只有在同步的块或者方法中才能调用wait&#x2F;notify等方法，<strong>否则会抛出java.lang.IllegalMonitorStateException的异常的原因</strong>。</p>
 <p><strong>JVM通过调用操作系统的互斥原语mutex来实现，被阻塞的线程会被挂起、等待重新调度</strong>，会导致“用户态和内核态”两个态之间来回切换，对性能有较大影响。</p>
 <h2 id="4-同步概念（待更新和优化）"><a href="#4-同步概念（待更新和优化）" class="headerlink" title="4 同步概念（待更新和优化）"></a>4 同步概念（待更新和优化）</h2><h3 id="4-1-Java对象头"><a href="#4-1-Java对象头" class="headerlink" title="4.1 Java对象头"></a>4.1 Java对象头</h3><p>在JVM中，对象在内存中的布局分为三块区域：<strong>对象头、实例数据和对齐填充</strong>。</p>
-<p><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/7/29/164e3637df80c2a2~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" alt="img"></p>
+<p><img data-src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/7/29/164e3637df80c2a2~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" alt="img"></p>
 <blockquote>
 <p><strong>实例数据</strong>：存放类的属性数据信息，包括父类的属性信息；</p>
 <p><strong>对齐填充</strong>：由于虚拟机要求 <strong>对象起始地址必须是8字节的整数倍</strong>。填充数据不是必须存在的，仅仅是为了字节对齐；</p>
@@ -223,8 +260,8 @@
 <p>轻量级锁依赖 CAS 操作 Mark Word 来试图获取锁，如果重试成功，就使用轻量级锁；否则，进一步升级为重量级锁</p>
 <h3 id="5-7-重量级锁"><a href="#5-7-重量级锁" class="headerlink" title="5.7 重量级锁"></a>5.7 重量级锁</h3><p>如果<strong>锁竞争</strong>情况严重，某个达到最大自旋次数的线程，会将轻量级锁升级为重量级锁（依然是CAS修改锁标志位，但不修改持有锁的线程ID）。当后续线程尝试获取锁时，发现被占用的锁是重量级锁，则直接将自己挂起（而不是忙等），等待将来被唤醒。</p>
 <p>重量级锁是指当有一个线程获取锁之后，其余所有等待获取该锁的线程都会处于<strong>阻塞</strong>状态。简言之，就是所有的控制权都交给了操作系统，由操作系统来负责线程间的调度和线程的状态变更。而这样会出现频繁地对线程运行状态的切换，线程的挂起和唤醒，从而消耗大量的系统资。</p>
-<p><img src="https://s2.51cto.com/images/blog/202107/29/8cc55984152076f48b975796dbe8d6b2.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_30,g_se,x_10,y_10,shadow_20,type_ZmFuZ3poZW5naGVpdGk=/format,webp/resize,m_fixed,w_1184" alt="Java并发之锁升级：无锁-&gt;偏向锁-&gt;轻量级锁-&gt;重量级锁_临界区_03"></p>
-<p><img src="https://ask.qcloudimg.com/http-save/yehe-4517995/w527xtazin.png?imageView2/2/w/2560/h/7000" alt="img"></p>
+<p><img data-src="https://s2.51cto.com/images/blog/202107/29/8cc55984152076f48b975796dbe8d6b2.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_30,g_se,x_10,y_10,shadow_20,type_ZmFuZ3poZW5naGVpdGk=/format,webp/resize,m_fixed,w_1184" alt="Java并发之锁升级：无锁-&gt;偏向锁-&gt;轻量级锁-&gt;重量级锁_临界区_03"></p>
+<p><img data-src="https://ask.qcloudimg.com/http-save/yehe-4517995/w527xtazin.png?imageView2/2/w/2560/h/7000" alt="img"></p>
 <h3 id="5-8-总结"><a href="#5-8-总结" class="headerlink" title="5.8 总结"></a>5.8 总结</h3><ul>
 <li>当只有一个线程时，线程占有锁时是偏向锁；</li>
 <li>当有其他线程竞争锁时，偏向锁升级为轻量级锁；</li>
@@ -279,43 +316,6 @@
 ]]></content>
       <categories>
         <category>项目</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>面试八股——Spring系列01</title>
-    <url>/2023/04/20/%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E2%80%94%E2%80%94Spring%E7%B3%BB%E5%88%97/</url>
-    <content><![CDATA[<h2 id="1-Spring-MVC的工作流程"><a href="#1-Spring-MVC的工作流程" class="headerlink" title="1 Spring MVC的工作流程"></a>1 Spring MVC的工作流程</h2><p><img src="https://pic2.zhimg.com/80/v2-16d4df4fcf529667f4cb10dbbea654dd_720w.webp" alt="https://pic3.zhimg.com/80/v2-4d4f8b01c6b9faad1af473dcdda4ff06_720w.webp"></p>
-<ul>
-<li>客户端发送请求-&gt; 前端控制器 DispatcherServlet 接受客户端请求 -&gt; 调用处理器映射器 HandlerMapping 解析请求对应的 Handler-&gt; HandlerAdapter 会根据 Handler 来调用真正的处理器处理请求，并处理相应的业务逻辑 -&gt; 处理器返回一个模型视图 ModelAndView -&gt; 视图解析器进行解析，并返回一个视图对象-&gt;前端控制器 DispatcherServlet 渲染数据（将Model传给View）-&gt;将得到视图对象返回给用户</li>
-</ul>
-<p>（1）客户端（浏览器）发送请求，直接请求到 DispatcherServlet。</p>
-<p>（2）DispatcherServlet 根据请求信息调用 HandlerMapping，解析请求对应的 Handler。</p>
-<p>（3）解析到对应的 Handler（也就是我们平常说的 Controller 控制器）后，开始由 HandlerAdapter 适配器处理。</p>
-<p>（4）HandlerAdapter 会根据 Handler 来调用真正的处理器开处理请求，并处理相应的业务逻辑。</p>
-<p>（5）处理器处理完业务后，会返回一个 ModelAndView 对象，Model 是返回的数据对象，View 是个逻辑上的 View。</p>
-<p>（6）ViewResolver 会根据逻辑 View 查找实际的 View。</p>
-<p>（7）DispaterServlet 把返回的 Model 传给 View（视图渲染）。</p>
-<p>（8）把 View 返回给请求者（浏览器）</p>
-<h2 id="2-Spring几个常用的接口"><a href="#2-Spring几个常用的接口" class="headerlink" title="2 Spring几个常用的接口"></a>2 Spring几个常用的接口</h2><h3 id="2-1-BeanFactory接口"><a href="#2-1-BeanFactory接口" class="headerlink" title="2.1 BeanFactory接口"></a>2.1 BeanFactory接口</h3><p>BeanFactory： 以Factory结尾，表示它是一个工厂类，是用于管理Bean的一个工厂</p>
-<ul>
-<li><p>BeanFactory接口是Spring容器最基本的接口，它的实现机制采用的是Java经典的工厂模式。</p>
-</li>
-<li><p>BeanFactory接口提供了创建和管理Bean的方法。</p>
-</li>
-</ul>
-<h3 id="2-2-HandlerInterceptor接口"><a href="#2-2-HandlerInterceptor接口" class="headerlink" title="2.2 HandlerInterceptor接口"></a>2.2 HandlerInterceptor接口</h3><p>在SpringMVC 中定义一个Interceptor是比较非常简单，主要有两种方式：</p>
-<p>第一种：实现HandlerInterceptor 接口，或者是继承实现了HandlerInterceptor 接口的类，例如HandlerInterceptorAdapter；<br>第二种：实现Spring的WebRequestInterceptor接口，或者是继承实现了WebRequestInterceptor的类。<br>HandlerInterceptor接口主要定义了三个方法：</p>
-<ol>
-<li><p><strong>boolean preHandle</strong> (HttpServletRequest request, HttpServletResponse response, Object handle)方法：该方法将在请求处理之前进行调用，只有该方法返回true，才会继续执行后续的Interceptor和Controller，当返回值为true 时，就会继续调用下一个Interceptor的preHandle就会继续调用下一个Interceptor的preHandle 方法，如果已经是最后一个Interceptor的时候就会是调用当前请求的Controller方法；</p>
-</li>
-<li><p><strong>void postHandle</strong> (HttpServletRequest request, HttpServletResponse response, Object handle, ModelAndView modelAndView)方法：该方法将在请求处理之后，DispatcherServlet进行视图返回渲染之前进行调用，可以在这个方法中对Controller 处理之后的ModelAndView 对象进行操作。</p>
-</li>
-<li><p><strong>void afterCompletion</strong>(HttpServletRequest request, HttpServletResponse response, Object handle, Exception ex)方法：该方法也是需要当前对应的Interceptor的preHandle方法的返回值为true时才会执行，该方法将在整个请求结束之后，也就是在DispatcherServlet 渲染了对应的视图之后执行。用于进行资源清理。</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>面试八股——Spring</category>
       </categories>
   </entry>
 </search>
